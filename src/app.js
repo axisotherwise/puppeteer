@@ -2,16 +2,24 @@ const express = require("express");
 const nunjucks = require("nunjucks");
 const morgan = require("morgan");
 const path = require("path");
+const schedule = require("node-schedule");
 
-const indexRouter = require("./src/routes/home");
+const { sequelize } = require("./models");
+const indexRouter = require("./routes");
+const crawler = require("./controllers/crawler");
+
+const end = new Date();
+end.setMinutes(end.getMinutes() + 1);
+schedule.scheduleJob(end, crawler.test);
 
 const app = express();
 app.set("port", process.env.NODE_ENV || 1000);
 app.set("view engine", "html");
-nunjucks.configure("./src/views", {
+nunjucks.configure("views", {
   express: app,
   watch: true,
 });
+sequelize.sync({ force: false });
 
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));

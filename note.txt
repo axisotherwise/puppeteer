@@ -1,0 +1,10 @@
+const end = new Date()
+
+일 더하기
+end.setDate(end.getDate() + 1) // 1일
+
+시간 더하기
+end.setHours(end.getHours() + 1) // 1시간
+
+분 더하기
+end.setMinutes(end.getMinutes() + 1) // 1분
