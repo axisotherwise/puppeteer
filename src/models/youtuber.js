@@ -9,12 +9,12 @@ module.exports = class Youtuber extends Sequelize.Model {
         unique: true,
       },
       image: {
-        type: Sequelize.STRING(100),
+        type: Sequelize.STRING(300),
         allowNull: true,
       },
       subscriber: {
         type: Sequelize.STRING(10),
-        allowNull: false,
+        allowNull: true,
       },
       activity: {
         type: Sequelize.STRING(10),

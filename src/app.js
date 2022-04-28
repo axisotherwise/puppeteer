@@ -3,16 +3,16 @@ const nunjucks = require("nunjucks");
 const morgan = require("morgan");
 const path = require("path");
 const schedule = require("node-schedule");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 
 const { sequelize } = require("./models");
 const indexRouter = require("./routes");
+const authRouter = require("./routes/auth");
 const crawler = require("./controllers/crawler");
 
-const end = new Date();
-end.setMinutes(end.getMinutes() + 1);
-schedule.scheduleJob(end, crawler.test);
-
 const app = express();
+crawler();
 app.set("port", process.env.NODE_ENV || 1000);
 app.set("view engine", "html");
 nunjucks.configure("views", {
@@ -25,8 +25,19 @@ app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser("puppeteer"));
+app.use(session({
+  resave: false,
+  saveUninitialized: false,
+  secret: "puppeteer",
+  cookie: {
+    httpOnly: true,
+    secure: false,
+  },
+}));
 
 app.use("/", indexRouter);
+app.use("/auth", authRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.url} ${req.method} 존재하지 않습니다.`);
