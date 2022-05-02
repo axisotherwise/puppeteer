@@ -13,19 +13,37 @@
         <th>채널</th>
         <th>구독자 수</th>
         <th>최근 활동</th>
+        <th></th>
         <th>팔로우</th>
       </tr>
     </thead>
     <tbody>
+      {% for youtuber in youtubers %}
       <tr class="active-row">
-        <td><img src="https://yt3.ggpht.com/LzBr3K1XPUs1fEwJA1dpcIJNQo7q0gsR3EIwCFFbrH8pZi5AUNYH2iGEE0R5AsMUlR_1J3QnWGE=s88-c-k-c0x00ffffff-no-rj" alt=""></td>
-        <td>김종국</td>
-        <td>32만</td>
-        <td>4시간 전</td>
-        <td>팔로우</td>
+        <td><img src="{{ youtuber.image }}" alt=""></td>
+        <td>{{ youtuber.channelName }}</td>
+        <td>{{ youtuber.subscriber }}</td>
+        <td>{{ youtuber.activity }}</td>
+        <td><input type="hidden" class="youtuber-id" value="{{ youtuber.id }}"></td>
+        {% if not followingIdList.includes(youtuber.id) %}
+        <td><button class="follow">팔로우</button></td>
+        {% endif %}
+        {% if followingIdList.includes(youtuber.id) %}
+        <td><button class="cancel">취소</button></td>
+        {% endif %}
       </tr>
+      {% endfor %}
     </tbody>
   </table>
-<script src="/index.js"></script>
+  <input type="hidden" class="user-id" value="{{ user.id }}">
+  <button class="test">테스트</button>
+  <h2>내 유튜버 목록</h2>
+  <ul>
+    {% for channel in channelData %}
+    <li>{{ channel }}</li>
+    {% endfor %}
+  </ul>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/rank.js"></script>
 </body>
 </html>

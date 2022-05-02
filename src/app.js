@@ -3,17 +3,21 @@ const nunjucks = require("nunjucks");
 const morgan = require("morgan");
 const path = require("path");
 const schedule = require("node-schedule");
+const passport = require("passport");
+const passportConfig = require("./passport");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
 const { sequelize } = require("./models");
 const indexRouter = require("./routes");
 const authRouter = require("./routes/auth");
+const userRouter = require("./routes/user");
 const crawler = require("./controllers/crawler");
 
 const app = express();
-crawler();
-app.set("port", process.env.NODE_ENV || 1000);
+passportConfig();
+// crawler();
+app.set("port", process.env.NODE_ENV || 2000);
 app.set("view engine", "html");
 nunjucks.configure("views", {
   express: app,
@@ -35,9 +39,12 @@ app.use(session({
     secure: false,
   },
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
+app.use("/user", userRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.url} ${req.method} 존재하지 않습니다.`);
@@ -53,5 +60,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(app.get("port"), () => {
-  console.log("1000");
+  console.log(2000);
 });

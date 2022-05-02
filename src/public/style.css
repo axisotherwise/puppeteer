@@ -45,3 +45,17 @@
     width: 20px;
     height: 20px;
   }
+
+.follow {
+  color: greenyellow;
+  border: 1px;
+  font-weight: 600;
+  background-color: transparent;
+}
+
+.cancel {
+  color: red;
+  border: 1px;
+  font-weight: 600;
+  background-color: transparent;
+}
